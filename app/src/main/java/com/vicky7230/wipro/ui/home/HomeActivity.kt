@@ -48,7 +48,7 @@ class HomeActivity : BaseActivity() {
 
         pull_to_refresh.setOnRefreshListener {
             dataAdapter.clearItems()
-            refreshData()
+            loadData()
         }
 
         data_list.layoutManager = linearLayoutManager
@@ -60,10 +60,18 @@ class HomeActivity : BaseActivity() {
         )
         data_list.adapter = dataAdapter
 
-        loadData()
+
+        //this will make sure we don't make redundant network requests when device screen is rotated
+        if (homeViewModel.getResponse() == null) {
+            pull_to_refresh.isRefreshing = true
+            loadData()
+        } else {
+            supportActionBar?.title = homeViewModel.getResponse()?.title
+            dataAdapter.addItems(homeViewModel.getResponse()?.rows as MutableList<Row>?)
+        }
     }
 
-    private fun refreshData() {
+    private fun loadData() {
         compositeDisposable.add(
             homeViewModel.getData()
                 .subscribeOn(Schedulers.io())
@@ -72,30 +80,11 @@ class HomeActivity : BaseActivity() {
                     pull_to_refresh.isRefreshing = false
                     supportActionBar?.title = response?.title
                     if (response?.rows != null && response.rows?.size?.compareTo(0) != 0) {
+                        homeViewModel.setResponse(response)
                         dataAdapter.addItems(response.rows as MutableList<Row>?)
                     }
                 }, { throwable ->
-                    hideLoading()
-                    showMessage(throwable.message)
-                    Timber.e(throwable)
-                })
-        )
-    }
-
-    private fun loadData() {
-        showLoading()
-        compositeDisposable.add(
-            homeViewModel.getData()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: Response? ->
-                    hideLoading()
-                    supportActionBar?.title = response?.title
-                    if (response?.rows != null && response.rows?.size?.compareTo(0) != 0) {
-                        dataAdapter.addItems(response.rows as MutableList<Row>?)
-                    }
-                }, { throwable ->
-                    hideLoading()
+                    pull_to_refresh.isRefreshing = false
                     showMessage(throwable.message)
                     Timber.e(throwable)
                 })
