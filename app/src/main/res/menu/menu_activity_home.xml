@@ -5,7 +5,7 @@
     <item
         android:id="@+id/attribution"
         android:title="@string/credits"
-        android:icon="@drawable/ic_action_name"
+        android:icon="@drawable/ic_info"
         app:showAsAction="always"
         />
 

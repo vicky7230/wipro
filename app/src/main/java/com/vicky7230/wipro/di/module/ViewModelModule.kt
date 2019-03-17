@@ -18,6 +18,6 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(HomeViewModel::class)
-    internal abstract fun postMoviesViewModel(viewModel: HomeViewModel): ViewModel
+    internal abstract fun postHomeViewModel(viewModel: HomeViewModel): ViewModel
 
 }

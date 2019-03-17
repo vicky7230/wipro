@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -29,6 +28,7 @@ class RecyclerViewTest {
         ActivityScenario.launch(HomeActivity::class.java)
     }
 
+    //test case when all data is present
     @Test
     fun scrollToItem_checkItsText() {
         // First scroll to the position that needs to be matched and click on it.
@@ -41,15 +41,11 @@ class RecyclerViewTest {
                 )
             )
 
-        // Match the text in an item below the fold and check that it's displayed.
+        // Match the text in an item and check that it's displayed.
         val itemElementText = getApplicationContext<Context>().resources.getString(
             R.string.transportation
         )
 
         onView(withText(itemElementText)).check(matches(isDisplayed()))
     }
-
-
-
-
 }
