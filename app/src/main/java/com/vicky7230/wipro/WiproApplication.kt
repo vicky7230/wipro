@@ -2,6 +2,7 @@ package com.vicky7230.wipro
 
 import android.app.Activity
 import android.app.Application
+import com.vicky7230.wipro.di.component.DaggerApplicationComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -20,12 +21,11 @@ class WiproApplication : Application(), HasActivityInjector{
             Timber.plant(Timber.DebugTree())
         }
 
-        /*DaggerApplicationComponent
+        DaggerApplicationComponent
             .builder()
             .application(this)
             .build()
-            .inject(this)*/
-
+            .inject(this)
 
     }
 

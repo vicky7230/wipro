@@ -1,4 +1,4 @@
-package com.vicky7230.wipro.ui.component
+package com.vicky7230.wipro.di.component
 
 import com.vicky7230.wipro.di.module.ActivityBindingModule
 import com.vicky7230.wipro.di.module.ViewModelModule

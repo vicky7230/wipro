@@ -19,8 +19,8 @@ class HomeActivityModule {
         )
     }
 
-    /*@Provides
-    fun provideTvSearchAdapter(): TvSearchAdapter {
-        return TvSearchAdapter(arrayListOf())
-    }*/
+    @Provides
+    fun provideDataAdapter(): DataAdapter {
+        return DataAdapter(arrayListOf())
+    }
 }

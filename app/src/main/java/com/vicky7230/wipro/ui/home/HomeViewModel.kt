@@ -10,7 +10,7 @@ class HomeViewModel @Inject constructor(
     private val dataManager: DataManager
 ) : ViewModel() {
 
-    fun getData(query: String, page: Int): Observable<Response> {
+    fun getData(): Observable<Response> {
         return dataManager.getData()
     }
 }
