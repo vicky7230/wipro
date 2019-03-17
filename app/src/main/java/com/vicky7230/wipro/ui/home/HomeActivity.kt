@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.vicky7230.wipro.R
 import com.vicky7230.wipro.data.network.model.Response
 import com.vicky7230.wipro.data.network.model.Row
@@ -45,6 +46,11 @@ class HomeActivity : BaseActivity() {
     private fun init() {
         setSupportActionBar(toolbar as Toolbar?)
 
+        pull_to_refresh.setOnRefreshListener {
+            dataAdapter.clearItems()
+            refreshData()
+        }
+
         data_list.layoutManager = linearLayoutManager
         data_list.addItemDecoration(
             DividerItemDecoration(
@@ -55,6 +61,25 @@ class HomeActivity : BaseActivity() {
         data_list.adapter = dataAdapter
 
         loadData()
+    }
+
+    private fun refreshData() {
+        compositeDisposable.add(
+            homeViewModel.getData()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response: Response? ->
+                    pull_to_refresh.isRefreshing = false
+                    supportActionBar?.title = response?.title
+                    if (response?.rows != null && response.rows?.size?.compareTo(0) != 0) {
+                        dataAdapter.addItems(response.rows as MutableList<Row>?)
+                    }
+                }, { throwable ->
+                    hideLoading()
+                    showMessage(throwable.message)
+                    Timber.e(throwable)
+                })
+        )
     }
 
     private fun loadData() {

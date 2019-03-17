@@ -13,6 +13,11 @@ import kotlinx.android.synthetic.main.list_item.view.*
 class DataAdapter(private val rows: MutableList<Row>?) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    fun clearItems() {
+        this.rows?.clear()
+        notifyDataSetChanged()
+    }
+
     fun addItems(rows: MutableList<Row>?) {
         rows?.let { this.rows?.addAll(it) }
         notifyDataSetChanged()
@@ -41,12 +46,20 @@ class DataAdapter(private val rows: MutableList<Row>?) :
             GlideApp
                 .with(itemView.context)
                 .load(row?.imageHref)
+                .error(R.drawable.error)
                 .transition(withCrossFade())
                 .centerCrop()
                 .into(itemView.image)
 
-            itemView.title.text = row?.title
-            itemView.description.text = row?.description
+            if (row?.title.isNullOrBlank())
+                itemView.title.text = "N/A"
+            else
+                itemView.title.text = row?.title
+
+            if (row?.description.isNullOrBlank())
+                itemView.description.text = "N/A"
+            else
+                itemView.description.text = row?.description
 
         }
     }
