@@ -55,18 +55,4 @@ open class BaseActivity : AppCompatActivity() {
         if (message != null)
             displayError(message)
     }
-
-    /*fun handleApiError(throwable: Throwable) {
-        if (throwable is HttpException) {
-            when (throwable.code()) {
-                401 -> {
-                    showError("sessionId expired or invalid.")
-                    // TODO
-                    // log out the user and clear his data
-                }
-            }
-        } else {
-            showError(throwable.message ?: "")
-        }
-    }*/
 }
